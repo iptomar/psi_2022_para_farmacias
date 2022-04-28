@@ -8,10 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Parafarmacia.Scripts;
+
 namespace Parafarmacia {
     public partial class Main : Form {
+       
         public Main() {
             InitializeComponent();
         }
+
     }
 }

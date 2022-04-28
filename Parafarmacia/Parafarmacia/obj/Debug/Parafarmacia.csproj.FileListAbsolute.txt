@@ -1,0 +1,11 @@
+D:\Mega\PSI\Parafarmacia\Parafarmacia\Parafarmacia\bin\Debug\Parafarmacia.exe.config
+D:\Mega\PSI\Parafarmacia\Parafarmacia\Parafarmacia\bin\Debug\Parafarmacia.exe
+D:\Mega\PSI\Parafarmacia\Parafarmacia\Parafarmacia\bin\Debug\Parafarmacia.pdb
+D:\Mega\PSI\Parafarmacia\Parafarmacia\Parafarmacia\obj\Debug\Parafarmacia.csproj.AssemblyReference.cache
+D:\Mega\PSI\Parafarmacia\Parafarmacia\Parafarmacia\obj\Debug\Parafarmacia.csproj.SuggestedBindingRedirects.cache
+D:\Mega\PSI\Parafarmacia\Parafarmacia\Parafarmacia\obj\Debug\Parafarmacia.Main.resources
+D:\Mega\PSI\Parafarmacia\Parafarmacia\Parafarmacia\obj\Debug\Parafarmacia.Properties.Resources.resources
+D:\Mega\PSI\Parafarmacia\Parafarmacia\Parafarmacia\obj\Debug\Parafarmacia.csproj.GenerateResource.cache
+D:\Mega\PSI\Parafarmacia\Parafarmacia\Parafarmacia\obj\Debug\Parafarmacia.csproj.CoreCompileInputs.cache
+D:\Mega\PSI\Parafarmacia\Parafarmacia\Parafarmacia\obj\Debug\Parafarmacia.exe
+D:\Mega\PSI\Parafarmacia\Parafarmacia\Parafarmacia\obj\Debug\Parafarmacia.pdb

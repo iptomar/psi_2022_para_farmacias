@@ -22,8 +22,8 @@ namespace projetoPSI.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Medicamento",
-                columns: new[] { "MedicId", "Nome", "Preco" },
-                values: new object[] { 1, "Benuron", 5m });
+                columns: new[] { "MedicId", "Nome", "Preco", "Descrição" },
+                values: new object[] { 1, "Benuron", 5m, "Olá" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

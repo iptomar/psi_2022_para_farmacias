@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using projetoPSI.Data;
 
 namespace projetoPSI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220501170839_medicamentos22")]
+    partial class medicamentos22
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,7 +237,7 @@ namespace projetoPSI.Data.Migrations
                         new
                         {
                             MedicId = 1,
-                            Descricao = "Descrição do Medicamento",
+                            Descricao = "Olá eu sou o Ramos e sou um atrasado mental",
                             Nome = "Benuron",
                             Preco = 5m
                         });

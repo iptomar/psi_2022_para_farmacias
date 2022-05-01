@@ -23,4 +23,10 @@
   <ItemGroup>
     <Folder Include="Views\Medicamentos\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20220501172121_medicamentos33.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220501170839_medicamentos22.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220501172121_medicamentos33.cs" />
+    <Compile Remove="Data\Migrations\20220501170839_medicamentos22.cs" />
+  </ItemGroup>
 </Project>

@@ -17,8 +17,9 @@ namespace projetoPSI.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Medicamento>().HasData(
-                   new Medicamento { MedicId = 1, Nome = "Benuron", Preco = 5 }
+                   new Medicamento { MedicId = 1, Nome = "Benuron", Preco = 5, Descricao = "Descrição do Medicamento"}
                    );
+
 
         }
         public DbSet<Medicamento> Medicamento { get; set; }

@@ -18,7 +18,6 @@ namespace projetoPSI.Models
         [Key]
         public int MedicId { get; set; }
 
-
         /// <summary>
         /// nome do medicamento
         /// </summary>
@@ -30,6 +29,13 @@ namespace projetoPSI.Models
         /// </summary>
         [Display(Name = "Preço")]
         public decimal Preco { get; set; }
+
+        /// <summary>
+        /// descricao do medicamento
+        /// </summary>
+        [Display(Name = "Descrição do Medicamento")]
+        public String Descricao { get; set; }
+
 
     }
 }

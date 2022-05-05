@@ -1,7 +1,13 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\projetoPSI",
+    "\\projetoPSI\\Data",
+    "\\projetoPSI\\Data\\Migrations",
+    "\\projetoPSI\\Models",
+    "\\projetoPSI\\Views",
+    "\\projetoPSI\\Views\\Medicamentos"
   ],
-  "SelectedNode": "\\D:\\Mega\\PSI\\PSI_PROJETO",
+  "SelectedNode": "\\projetoPSI\\projetoPSI.sln",
   "PreviewInSolutionExplorer": false
 }

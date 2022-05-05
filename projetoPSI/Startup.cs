@@ -62,7 +62,7 @@ namespace projetoPSI
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Medicamentos}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

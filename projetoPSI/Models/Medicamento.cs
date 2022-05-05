@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace projetoPSI.Models
 
 {
-    //ehe
+
 
     public class Medicamento
     {
@@ -20,7 +20,7 @@ namespace projetoPSI.Models
         public int MedicId { get; set; }
 
         /// <summary>
-        /// nome do medicamento
+        /// nome do medicamenxto
         /// </summary>
         [Display(Name = "Nome do Medicamento")]
         public String Nome { get; set; }

@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace projetoPSI.Models
 
 {
-    //teste de commit e push bonet e batista
+    //teste de commit e push bonet e andré
 
     public class Medicamento
     {

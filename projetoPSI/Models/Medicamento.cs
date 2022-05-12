@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace projetoPSI.Models
 
-    //Bonet Setup incial
+    //Vamos la pa
 {
 
     public class Medicamento

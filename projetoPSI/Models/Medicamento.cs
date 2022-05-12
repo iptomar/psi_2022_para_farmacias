@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace projetoPSI.Models
 
-    //Commit teste final e mesmo sério
+    //Hernani
 {
 
     public class Medicamento

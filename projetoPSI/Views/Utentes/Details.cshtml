@@ -1,0 +1,68 @@
+﻿@model projetoPSI.Models.Utente
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="container">
+    <br /><br /><br /><br />
+    <h1>Details</h1>
+
+    <div>
+        <h4>Utente</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Nome)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Nome)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DataNasc)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DataNasc)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.NIF)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.NIF)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.UtenteId">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+    <br />
+    @{if (Model.Receitas.Count != 0)
+        {
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Data
+            </th>
+            <th>
+                Preco
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Receitas)
+        {
+<tr>
+    <td>
+        @item.ReceitaData
+    </td>
+    <td>
+        @item.Preco
+    </td>
+</tr>                }
+    </tbody>
+</table> }
+            else
+            {
+<h6>Esta receita não tem Medicamentos</h6> } }
+    </div>

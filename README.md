@@ -1,1 +1,0 @@
-# psi_2022_para_farmacias

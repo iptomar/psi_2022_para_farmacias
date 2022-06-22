@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="header__menu__dropdown">
+    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+    {
+        <li><a href="/Carts" class="nav-link">Shoping Cart</a></li>
+        <li><a href="/Orders" class="nav-link">Orders</a></li>
+        <li><a href="/Users" class="nav-link">Users</a></li>
+        <li><a href="/Products" class="nav-link">Products</a></li>
+        <li><a href="/Categories" class="nav-link">Categories</a></li>
+    }
+    else if (SignInManager.IsSignedIn(User) && User.IsInRole("User"))
+    {
+        <li><a href="/Carts" class="nav-link">Shoping Cart</a></li>
+        <li><a href="/Orders" class="nav-link">Orders</a></li>
+        <li><a href="/Products" class="nav-link">Products</a></li>
+        <li><a href="/Categories" class="nav-link">Categories</a></li>
+    }
+
+    else
+    {
+        <li><a href="/Products" class="nav-link">Products</a></li>
+        <li><a href="/Categories" class="nav-link">Categories</a></li>
+    }
+</ul>
+

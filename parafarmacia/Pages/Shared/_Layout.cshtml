@@ -1,35 +1,103 @@
-﻿<!DOCTYPE html>
+﻿@inject parafarmacia.Model.Services.NavbarService NavbarService
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - parafarmacia</title>
+    <title>@ViewData["Title"] - Parafarmácia</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/style.css" type="text/css">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">parafarmacia</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="humberger__menu__overlay"></div>
+
+    <!-- mobile header-->
+    <div class="humberger__menu__wrapper">
+        <div class="humberger__menu__logo">
+            <a href="#" class="logo">Parafarmácia</a>
+        </div>
+        <div class="humberger__menu__cart">
+            <ul>
+                <li>
+                    <div class="header__top__right__language">
+                        <partial name="_LoginPartial" />
+                    </div>
+                </li>
+                <li><a href="/Carts"><i class="fa fa-shopping-bag"></i> <span>@(await NavbarService.GetCartProductsSizeAsync())</span></a></li>
+            </ul>
+            <div class="header__cart__price">Total: <span>@(await NavbarService.GetCartTotalAsync()) €</span></div>
+        </div>
+
+        <nav class="humberger__menu__nav mobile-menu">
+            <ul>
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="/Products">Shop</a></li>
+                <li>
+                    <a href="#">Pages</a>
+                    <partial name="_MenuPartial" />
+                </li>
+            </ul>
+        </nav>
+        <div id="mobile-menu-wrap"></div>
+    </div>
+
+    <!-- desktop header-->
+    <header class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="header__logo">
+                        <a asp-area="" asp-page="/Index" class="logo">Parfarmácia</a>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <nav class="header__menu">
+                        <ul>
+                            <li class="active"><a href="#">Home</a></li>
+                            <li><a href="/Products">Shop</a></li>
+                            <li>
+                                <a href="#">Pages</a>
+                                <partial name="_MenuPartial" />
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-4">
+                    <div class="header__cart">
+                        <ul>
+                            <li>
+                                <nav class="header__menu" style="text-align: left; padding: 0">
+                                    <ul>
+                                        <li>
+                                            <partial name="_LoginPartial" />
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </li>
+                            <li><a href="/Carts"><i class="fa fa-shopping-bag"></i> <span>@(await NavbarService.GetCartProductsSizeAsync())</span></a></li>
+                        </ul>
+                        <div class="header__cart__price">Total: <span>@(await NavbarService.GetCartTotalAsync()) €</span></div>
+                    </div>
                 </div>
             </div>
-        </nav>
+            <div class="humberger__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -38,13 +106,17 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - parafarmacia - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2022 - Parafarmácia - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/main.js" asp-append-version="true"></script>
+    <script src="~/js/mixitup.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/jquery.nice-select.min.js"></script>
+    <script src="~/js/jquery.slicknav.js"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

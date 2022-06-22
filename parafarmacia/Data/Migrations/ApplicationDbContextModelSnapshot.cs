@@ -40,6 +40,22 @@ namespace parafarmacia.Data.Migrations
                         .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            ConcurrencyStamp = "262c279e-eda4-4732-9e0a-08d00c5240fa",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            ConcurrencyStamp = "a6cbcf1f-4f30-4c5b-a196-e1d7bcf50b7b",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -125,6 +141,13 @@ namespace parafarmacia.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "1",
+                            RoleId = "1"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -225,17 +248,17 @@ namespace parafarmacia.Data.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8f1838b0-9759-4304-95a6-eb24768ab04f",
+                            ConcurrencyStamp = "99fd8642-3f3a-4808-9435-eb601fd9f7d0",
                             Email = "admin@admin",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Nome = "Admin",
                             NormalizedEmail = "ADMIN@ADMIN",
                             NormalizedUserName = "ADMIN@ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAENl45sLkwJ2T3iWZtBWE6On9g7TXm0u9z6G2/1vH+XTh8f/4OBFyQbHL9FYkO8/MQA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEATE/6P3o1uMEoapD7I7pdDWVOhmJM2oXNMPgps4Pr6MbudBA33gyMrjC7/hVEGZiA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
-                            Timestamp = new DateTime(2022, 6, 14, 0, 53, 18, 901, DateTimeKind.Local).AddTicks(2660),
+                            Timestamp = new DateTime(2022, 6, 15, 1, 35, 50, 642, DateTimeKind.Local).AddTicks(6950),
                             TwoFactorEnabled = false,
                             User = 1,
                             UserName = "admin@admin"
@@ -391,32 +414,6 @@ namespace parafarmacia.Data.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("parafarmacia.Models.UserRoles", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(40);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("UserRole");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Admin"
-                        });
-                });
-
             modelBuilder.Entity("parafarmacia.Models.Users", b =>
                 {
                     b.Property<int>("Id")
@@ -432,15 +429,14 @@ namespace parafarmacia.Data.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(40);
 
-                    b.Property<int>("RoleFK")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique();
-
-                    b.HasIndex("RoleFK");
 
                     b.ToTable("User");
 
@@ -450,7 +446,7 @@ namespace parafarmacia.Data.Migrations
                             Id = 1,
                             Email = "admin@admin",
                             Name = "Admin",
-                            RoleFK = 1
+                            Role = "Admin"
                         });
                 });
 
@@ -556,15 +552,6 @@ namespace parafarmacia.Data.Migrations
                     b.HasOne("parafarmacia.Models.ProductCategories", "Category")
                         .WithMany("CategoryList")
                         .HasForeignKey("CategoryFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("parafarmacia.Models.Users", b =>
-                {
-                    b.HasOne("parafarmacia.Models.UserRoles", "Role")
-                        .WithMany("UsersList")
-                        .HasForeignKey("RoleFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

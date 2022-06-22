@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +12,8 @@ using parafarmacia.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace parafarmacia
 {
@@ -36,6 +38,9 @@ namespace parafarmacia
                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddControllersWithViews();
+
+            services.AddTransient(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
+            services.AddTransient<Model.Services.NavbarService>();
 
             services.AddRazorPages();
         }
@@ -66,8 +71,10 @@ namespace parafarmacia
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+               name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
+                );
+
                 endpoints.MapRazorPages();
             });
         }

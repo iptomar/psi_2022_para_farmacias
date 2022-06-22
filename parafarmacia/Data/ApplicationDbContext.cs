@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +37,6 @@ namespace parafarmacia.Data
         }
 
         public DbSet<ProductCategories> ProductCategories { get; set; }
-        public DbSet<UserRoles> UserRole { get; set; }
         public DbSet<Orders> Orders { get; set; }
         public DbSet<Products> Products { get; set; }
         public DbSet<Carts> Carts { get; set; }
@@ -57,10 +56,6 @@ namespace parafarmacia.Data
             builder.Entity<ProductCategories>()
                 .HasIndex(c => c.Name)
                 .IsUnique();
-            builder.Entity<UserRoles>()
-                .HasIndex(c => c.Name)
-                .IsUnique();
-
 
             builder.Entity<OrderProduct>().HasOne(op => op.Product).WithMany(p => p.OrderProductList);
             builder.Entity<OrderProduct>().HasOne(op => op.Order).WithMany(o => o.OrderProductList);
@@ -72,16 +67,6 @@ namespace parafarmacia.Data
 
             builder.Entity<Products>().HasOne(p => p.Category).WithMany(c => c.CategoryList);
 
-            builder.Entity<Users>().HasOne(u => u.Role).WithMany(r => r.UsersList);
-
-            //cria o role de admin
-            builder.Entity<UserRoles>()
-            .HasData(new UserRoles
-            {
-                Id = 1,
-                Name = "Admin",
-            });
-
             //cria o utilizador admin para gerir os dados da aplicação web
             builder.Entity<Users>().HasData(new
             Users
@@ -89,9 +74,23 @@ namespace parafarmacia.Data
                 Id = 1,
                 Name = "Admin",
                 Email = "admin@admin",
-                RoleFK = 1
+                Role = "Admin"
             });
 
+            //adiciona o role de admin e user
+            builder.Entity<IdentityRole>()
+                .HasData(new IdentityRole
+                {
+                    Id = "1",
+                    Name = "Admin",
+                    NormalizedName = "Admin".ToUpper()
+                },
+                new IdentityRole
+                {
+                    Id = "2",
+                    Name = "User",
+                    NormalizedName = "User".ToUpper()
+                });
 
             //cria o Application user: admin
             builder.Entity<ApplicationUser>()
@@ -109,6 +108,28 @@ namespace parafarmacia.Data
                     SecurityStamp = string.Empty,
                     Timestamp = DateTime.Now
                 });
+
+            //associa o role: Admin ao ApplicationUser: Admin
+            builder.Entity<IdentityUserRole<string>>(b =>
+            {
+                builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+                {
+                    RoleId = "1",
+                    UserId = "1"
+                });
+
+                // Primary key
+                b.HasKey(r => new { r.UserId, r.RoleId });
+
+                // Maps to the AspNetUserRoles table
+                b.ToTable("AspNetUserRoles");
+            });
         }
+
+
+        public DbSet<parafarmacia.Models.OrderProduct> OrderProduct { get; set; }
+
+
+        public DbSet<parafarmacia.Models.ProductCart> ProductCart { get; set; }
     }
 }

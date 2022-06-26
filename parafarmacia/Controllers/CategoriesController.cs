@@ -25,24 +25,6 @@ namespace parafarmacia.Controllers
             return View(await _context.ProductCategories.ToListAsync());
         }
 
-        // GET: Categories/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var productCategories = await _context.ProductCategories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (productCategories == null)
-            {
-                return NotFound();
-            }
-
-            return View(productCategories);
-        }
-
         // GET: Categories/Create
         public IActionResult Create()
         {
@@ -72,57 +54,7 @@ namespace parafarmacia.Controllers
             return View(productCategories);
         }
 
-        // GET: Categories/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var productCategories = await _context.ProductCategories.FindAsync(id);
-            if (productCategories == null)
-            {
-                return NotFound();
-            }
-            return View(productCategories);
-        }
-
-        // POST: Categories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] ProductCategories productCategories)
-        {
-            if (id != productCategories.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(productCategories);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductCategoriesExists(productCategories.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(productCategories);
-        }
-
+       
         // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

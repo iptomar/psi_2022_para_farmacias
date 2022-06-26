@@ -89,7 +89,7 @@ a:hover,
 a:focus {
 	text-decoration: none;
 	outline: none;
-	color: #7fad39;
+	color: #ffffff;
 	transition: 0.6s;
 }
 
@@ -3372,4 +3372,7 @@ ol {
 	color: #000;
     font-size: 32px;
     font-weight: 500;
+}
+.logo:hover {
+	color: #7fad39;
 }

@@ -1,8 +1,0 @@
-version: '3.4'
-
-services:
-  parafarmcia:
-    image: ${DOCKER_REGISTRY-}parafarmcia
-    build:
-      context: .
-      dockerfile: ./Dockerfile

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,19 +15,23 @@ namespace parafarmacia.Controllers
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OrdersController(ApplicationDbContext context)
+        public OrdersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Orders
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Orders.ToListAsync());
         }
 
         // GET: Orders/Details/5
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,80 +49,71 @@ namespace parafarmacia.Controllers
             return View(orders);
         }
 
-        // GET: Orders/Create
-        public IActionResult Create()
+        // GET: Carts/Finalize
+        [Authorize(Roles = "Admin, User")]
+        public async Task<IActionResult> Finalize()
         {
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+
+            var cart = await _context.Carts.Where(c => c.UserFK == user.User).Include(c => c.ProductCartList).ThenInclude(pc => pc.Product).OrderByDescending(c => c.Id).FirstOrDefaultAsync();
+
+            if (cart == null)
+            {
+                return RedirectToAction("MyCart", "Carts");
+            }
+
+            if (await _context.ProductCart.Where(pc => pc.CartFK == cart.Id).AnyAsync())
+            {
+                return View();
+            }
+
+            return RedirectToAction("MyCart", "Carts");
+
         }
 
-        // POST: Orders/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Carts/Submit
         [HttpPost]
+        [Authorize(Roles = "Admin, User")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Address,NIF")] Orders orders)
+        public async Task<IActionResult> Submit([Bind("Address,NIF")] Orders orders)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(orders);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(orders);
-        }
+                var user = await _userManager.GetUserAsync(User);
 
-        // GET: Orders/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+                var cart = await _context.Carts.Where(c => c.UserFK == user.User).Include(c => c.ProductCartList).ThenInclude(pc => pc.Product).OrderByDescending(c => c.Id).FirstOrDefaultAsync();
 
-            var orders = await _context.Orders.FindAsync(id);
-            if (orders == null)
-            {
-                return NotFound();
-            }
-            return View(orders);
-        }
-
-        // POST: Orders/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Address,NIF")] Orders orders)
-        {
-            if (id != orders.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (cart == null)
                 {
-                    _context.Update(orders);
+                    return RedirectToAction("MyCart", "Carts");
+                }
+
+                if (await _context.ProductCart.Where(pc => pc.CartFK == cart.Id).AnyAsync())
+                {
+                    foreach (var pc in cart.ProductCartList.ToList())
+                    {
+                        orders.OrderProductList.Add(
+                            new OrderProduct { Order = orders, Price = pc.Price, Product = pc.Product, Quantity = pc.Quantity }
+                            );
+                    }
+
+                    _context.Add(orders);
+
+                    //create a new shopping cart
+                    var newCart = new Carts { Total = 0, UserFK = user.User };
+                    _context.Add(newCart);
+
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrdersExists(orders.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+
             }
-            return View(orders);
+            return RedirectToAction("MyCart", "Carts");
         }
 
         // GET: Orders/Delete/5
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,6 +134,7 @@ namespace parafarmacia.Controllers
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var orders = await _context.Orders.FindAsync(id);

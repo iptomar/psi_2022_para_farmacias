@@ -32,7 +32,7 @@ namespace parafarmacia.Model.Services
 
             if (user == null) return 0;
 
-            var lastCart = _context.Carts.OrderByDescending(c => c.Id).LastOrDefault(c => c.UserFK == user.User);
+            var lastCart = _context.Carts.Where(c => c.UserFK == user.User).OrderByDescending(c => c.Id).FirstOrDefault(c => c.UserFK == user.User);
             if (lastCart == null) return 0;
 
             return lastCart.Total;
@@ -44,7 +44,7 @@ namespace parafarmacia.Model.Services
 
             if (user==null) return 0;
 
-            var lastCart = _context.Carts.OrderByDescending(c => c.Id).LastOrDefault(c => c.UserFK == user.User);
+            var lastCart = _context.Carts.Where(c=>c.UserFK==user.User).OrderByDescending(c => c.Id).FirstOrDefault(c => c.UserFK == user.User);
             if (lastCart == null) return 0;
 
             var productTypes = _context.ProductCart.Where(pc => pc.CartFK == lastCart.Id && pc.Cart.UserFK==user.User).ToDictionary(pc => pc.ProductFK).ToList();

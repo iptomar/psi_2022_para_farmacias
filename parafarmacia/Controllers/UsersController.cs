@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,12 @@ namespace parafarmacia.Controllers
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Users
@@ -150,6 +153,11 @@ namespace parafarmacia.Controllers
         {
             var users = await _context.User.FindAsync(id);
             _context.User.Remove(users);
+
+
+            var applicationUser = await _userManager.GetUserAsync(User);
+            await _userManager.DeleteAsync(applicationUser);
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

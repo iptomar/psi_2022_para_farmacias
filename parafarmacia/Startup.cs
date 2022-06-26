@@ -37,7 +37,7 @@ namespace parafarmacia
                 .AddRoles<IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
             services.AddTransient(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
             services.AddTransient<Model.Services.NavbarService>();

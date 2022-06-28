@@ -24,10 +24,21 @@ namespace parafarmacia.Controllers
         }
 
         // GET: Orders
-        [Authorize(Roles = "Admin, User")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Orders.ToListAsync());
+        }
+
+        // GET: Orders
+        [Authorize(Roles = "Admin, User")]
+        public async Task<IActionResult> MyOrders()
+        {
+            var applicationUser = await _userManager.GetUserAsync(User);
+
+            var result = await _context.Orders.Where(o=>o.User==applicationUser.User).ToListAsync();
+
+            return View("MyOrders", result);
         }
 
         // GET: Orders/Details/5
@@ -46,6 +57,8 @@ namespace parafarmacia.Controllers
                 return NotFound();
             }
 
+            ViewBag.data = _context.OrderProduct.Where(op => op.OrderFK == orders.Id).Include(op => op.Product);
+            ViewBag.total = _context.Carts.Where(c => c.Id == orders.Cart).First().Total;
             return View(orders);
         }
 
@@ -79,9 +92,9 @@ namespace parafarmacia.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.GetUserAsync(User);
+                var applicationUser = await _userManager.GetUserAsync(User);
 
-                var cart = await _context.Carts.Where(c => c.UserFK == user.User).Include(c => c.ProductCartList).ThenInclude(pc => pc.Product).OrderByDescending(c => c.Id).FirstOrDefaultAsync();
+                var cart = await _context.Carts.Where(c => c.UserFK == applicationUser.User).Include(c => c.ProductCartList).ThenInclude(pc => pc.Product).OrderByDescending(c => c.Id).FirstOrDefaultAsync();
 
                 if (cart == null)
                 {
@@ -96,15 +109,15 @@ namespace parafarmacia.Controllers
                             new OrderProduct { Order = orders, Price = pc.Price, Product = pc.Product, Quantity = pc.Quantity }
                             );
                     }
-
+                    orders.Cart = cart.Id;
+                    orders.User = applicationUser.User;
                     _context.Add(orders);
 
                     //create a new shopping cart
-                    var newCart = new Carts { Total = 0, UserFK = user.User };
+                    var newCart = new Carts { Total = 0, UserFK = applicationUser.User };
                     _context.Add(newCart);
-
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("MyOrders", "Orders");
 
                 }
 

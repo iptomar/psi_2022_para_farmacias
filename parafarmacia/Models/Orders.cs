@@ -20,6 +20,10 @@ namespace parafarmacia.Models
         [Required(ErrorMessage = "Este campo é de preenchimento obrigatório.")]
         public int NIF { get; set; }
 
+        public int User { get; set; }
+
+        public int Cart { get; set; }
+
         public ICollection<OrderProduct> OrderProductList { get; set; }
     }
 

@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,17 +17,32 @@ namespace parafarmacia.Controllers
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        public static IWebHostEnvironment _environment;
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(ApplicationDbContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
+
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Products.Include(p => p.Category);
+
+            ViewBag.categories = _context.ProductCategories.ToList();
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        // Post: Products/ByCategory
+        [HttpPost]
+        public async Task<IActionResult> ByCategory([Bind("Id")] ProductCategories category)
+        {
+            var applicationDbContext = _context.Products.Where(p=>p.CategoryFK==category.Id).Include(p => p.Category);
+
+            ViewBag.categories = _context.ProductCategories.ToList();
+            return View("Index", await applicationDbContext.ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -46,6 +65,7 @@ namespace parafarmacia.Controllers
         }
 
         // GET: Products/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["CategoryFK"] = new SelectList(_context.ProductCategories, "Id", "Name");
@@ -57,10 +77,30 @@ namespace parafarmacia.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Image,Price,CategoryFK")] Products products)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,CategoryFK")] Products products, IFormFile Image)
         {
             if (ModelState.IsValid)
             {
+
+                //use default image
+                if (Image == null || !Image.ContentType.Contains("image"))
+                {
+                    products.Image = "default.png";
+
+                }
+                else
+                { // user inserted image
+                    Guid g= Guid.NewGuid();
+
+                    string extensao = Path.GetExtension(Image.FileName).ToLower();
+
+                    products.Image = g.ToString() + extensao;
+
+                    var fileStream = new FileStream(_environment.WebRootPath + "/img/products/" + g.ToString() + extensao, FileMode.Create);
+                    await Image.CopyToAsync(fileStream);
+                }
+
                 _context.Add(products);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -70,6 +110,7 @@ namespace parafarmacia.Controllers
         }
 
         // GET: Products/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,7 +132,8 @@ namespace parafarmacia.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Image,Price,CategoryFK")] Products products)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,CategoryFK")] Products products, IFormFile Image)
         {
             if (id != products.Id)
             {
@@ -102,8 +144,23 @@ namespace parafarmacia.Controllers
             {
                 try
                 {
-                    _context.Update(products);
-                    await _context.SaveChangesAsync();
+                    if (Image != null){
+                        if (Image.ContentType.Contains("image"))
+                        {
+                            Guid g = Guid.NewGuid();
+
+                            string extensao = Path.GetExtension(Image.FileName).ToLower();
+
+                            products.Image = g.ToString() + extensao;
+
+                            var fileStream = new FileStream(_environment.WebRootPath + "/img/products/" + g.ToString() + extensao, FileMode.Create);
+                            await Image.CopyToAsync(fileStream);
+
+                            _context.Update(products);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,6 +180,7 @@ namespace parafarmacia.Controllers
         }
 
         // GET: Products/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,6 +202,7 @@ namespace parafarmacia.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var products = await _context.Products.FindAsync(id);

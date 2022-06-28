@@ -17,7 +17,7 @@ namespace parafarmacia.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "O nome é de preenchimento obrigatório.")]
-        [StringLength(40, ErrorMessage = "O nome não pode ter mais de {1} carateres.")]
+        [StringLength(80, ErrorMessage = "O nome não pode ter mais de {1} carateres.")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Este campo é de preenchimento obrigatório.")]

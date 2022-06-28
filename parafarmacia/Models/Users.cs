@@ -24,7 +24,7 @@ namespace parafarmacia.Models
 
         [Required(ErrorMessage = "O nome é de preenchimento obrigatório.")]
         [Display(Name = "Nome")]
-        [StringLength(40, ErrorMessage = "O nome não pode ter mais de {1} carateres.")]
+        [StringLength(80, ErrorMessage = "O nome não pode ter mais de {1} carateres.")]
         public string Name { get; set; }
 
         public ICollection<Orders> OrdersList { get; set; }

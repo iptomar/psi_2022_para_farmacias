@@ -28,11 +28,12 @@
                 @foreach (var item in Model.Categories)
                 {
                     string image;
-                    var firstProduct = Model.Products.Where(p => p.CategoryFK == item.Id);
+                    var products = Model.AllProducts.Where(p => p.CategoryFK == item.Id).ToList();
 
-                    if (firstProduct.Any())
+                    if (products.Any())
                     {
-                        image = firstProduct.First().Image;
+                        image = products.First().Image;
+
                     }
                     else
                     {
@@ -41,7 +42,10 @@
 
                     <div class="col-lg-3">
                         <div class="categories__item set-bg" data-setbg="img/products/@image">
-                            <h5><a href="/Categories/Details/@item.Id">@item.Name</a></h5>
+                            <form class="form-inline" asp-controller="Products" asp-action="ByCategory" method="post">
+                                <input type="hidden" name="Id" value=@item.Id>
+                                <button type="submit" style=" background: none !important; border: none;"><h4>@item.Name</h4></button>
+                            </form>
                         </div>
                     </div>
                 }
@@ -61,17 +65,18 @@
         </div>
         <div class="row featured__filter">
             @foreach (var item in Model.Products)
-            {
+                {
                 <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
                     <div class="featured__item">
                         <div class="featured__item__pic set-bg" data-setbg="img/products/@item.Image">
                             <ul class="featured__item__pic__hover">
                                 <li>
-                                    <form class="form-inline" asp-controller="ProductCart" asp-action="Create" method="post">
-                                        <input type="hidden" id="Quantity" name="Quantity" value="1">
+                                    <form class="form-inline quickProductBuy" asp-controller="ProductCart" asp-action="Create" method="post">
+                                        <input type="hidden" id="Quantity" name="Quantity" value=1>
                                         <input type="hidden" id="ProductFK" name="ProductFK" value=@(item.Id)>
                                         <button type="submit">
                                             <i class="fa fa-shopping-cart"></i>
+                                            <span>1</span>
                                         </button>
                                     </form>
                                 </li>
@@ -133,13 +138,13 @@
                         <div class="latest-prdouct__slider__item">
                             @foreach (var item in Model.TopSellingProducts.Take(3))
                             {
-                                <a href="/Products/Details/@item.Key.Id" class="latest-product__item">
+                                <a href="/Products/Details/@item.Id" class="latest-product__item">
                                     <div class="latest-product__item__pic">
-                                        <img src="img/products/@item.Key.Image" alt="product" />
+                                        <img src="img/products/@item.Image" alt="product" />
                                     </div>
                                     <div class="latest-product__item__text">
-                                        <h6>@item.Key.Name</h6>
-                                        <span>@item.Key.Price €</span>
+                                        <h6>@item.Name</h6>
+                                        <span>@item.Price €</span>
                                     </div>
                                 </a>
                             }
@@ -147,13 +152,13 @@
                         <div class="latest-prdouct__slider__item">
                             @foreach (var item in Model.TopSellingProducts.TakeLast(3))
                             {
-                                <a href="/Products/Details/@item.Key.Id" class="latest-product__item">
+                                <a href="/Products/Details/@item.Id" class="latest-product__item">
                                     <div class="latest-product__item__pic">
-                                        <img src="img/products/@item.Key.Image" alt="product" />
+                                        <img src="img/products/@item.Image" alt="product" />
                                     </div>
                                     <div class="latest-product__item__text">
-                                        <h6>@item.Key.Name</h6>
-                                        <span>@item.Key.Price €</span>
+                                        <h6>@item.Name</h6>
+                                        <span>@item.Price €</span>
                                     </div>
                                 </a>
                             }
@@ -164,10 +169,3 @@
         </div>
     </div>
 </section>
-
-@section Scripts
-{
-    <script>function onSubmit(evt) {
-            evt.preventDefault();
-        }</script>
-}

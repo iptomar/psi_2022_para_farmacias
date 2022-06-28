@@ -25,17 +25,18 @@ namespace parafarmacia.Pages
         }
 
         public IEnumerable<Models.Products>? Products { get; set; }
+        public IEnumerable<Models.Products>? AllProducts { get; set; }
         public IEnumerable<Models.Products>? LatestProducts { get; set; }
-        public Dictionary<Models.Products, int>? TopSellingProducts { get; set; }
+        public IEnumerable<Models.Products>? TopSellingProducts { get; set; }
         public IEnumerable<Models.ProductCategories>? Categories { get; set; }
 
         public async Task OnGet()
         {
-            Products = await _context.Products.Include(p => p.Category).ToListAsync();
+            AllProducts = await _context.Products.Include(p => p.Category).ToListAsync();
+            TopSellingProducts = _context.Products.OrderByDescending(p=> p.OrderProductList.Count()).Take(6);
+            Products = await _context.Products.Include(p => p.Category).Take(8).ToListAsync();
             LatestProducts = _context.Products.OrderByDescending(p => p.Id).Take(6);
-            TopSellingProducts = _context.OrderProduct.GroupBy(op => op.ProductFK).Take(6).Select(e => new { Product = _context.Products.Where(p => p.Id == e.Key).FirstOrDefault(), Count = e.Count() }).ToDictionary(e => e.Product, e => e.Count);
             Categories = await _context.ProductCategories.ToListAsync();
         }
     }
 }
-

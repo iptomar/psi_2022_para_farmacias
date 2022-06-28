@@ -45,14 +45,14 @@ namespace parafarmacia.Data.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "262c279e-eda4-4732-9e0a-08d00c5240fa",
+                            ConcurrencyStamp = "6fcb301b-e2b1-46f9-8474-dddf1ac4daf9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "a6cbcf1f-4f30-4c5b-a196-e1d7bcf50b7b",
+                            ConcurrencyStamp = "20a6211a-0bf4-47f2-a575-51622e862801",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -248,17 +248,17 @@ namespace parafarmacia.Data.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "99fd8642-3f3a-4808-9435-eb601fd9f7d0",
+                            ConcurrencyStamp = "2c2f98df-0915-40dc-be62-68521eb64d0e",
                             Email = "admin@admin",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Nome = "Admin",
                             NormalizedEmail = "ADMIN@ADMIN",
                             NormalizedUserName = "ADMIN@ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEATE/6P3o1uMEoapD7I7pdDWVOhmJM2oXNMPgps4Pr6MbudBA33gyMrjC7/hVEGZiA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJgzXOcaIhTbNGlDe7WgZuJwWTD0MI7/2es/LPexM2goUNPAGBWQrU3VhSgfPgL/YQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
-                            Timestamp = new DateTime(2022, 6, 15, 1, 35, 50, 642, DateTimeKind.Local).AddTicks(6950),
+                            Timestamp = new DateTime(2022, 6, 28, 1, 29, 41, 136, DateTimeKind.Local).AddTicks(2420),
                             TwoFactorEnabled = false,
                             User = 1,
                             UserName = "admin@admin"
@@ -321,7 +321,13 @@ namespace parafarmacia.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Cart")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("NIF")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("User")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("UsersId")
@@ -399,7 +405,7 @@ namespace parafarmacia.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT")
-                        .HasMaxLength(40);
+                        .HasMaxLength(80);
 
                     b.Property<double>("Price")
                         .HasColumnType("REAL");
@@ -427,7 +433,7 @@ namespace parafarmacia.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT")
-                        .HasMaxLength(40);
+                        .HasMaxLength(80);
 
                     b.Property<string>("Role")
                         .IsRequired()
